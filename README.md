@@ -1,4 +1,4 @@
-##### typescript 发布包流程
+##### typescript 创建包编写包发布包流程
 - 初始化
 - 修改 tsconfig.json 配置
 - husky构建代码检查
