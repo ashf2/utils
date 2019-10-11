@@ -1,0 +1,12 @@
+{
+  "transform": {
+    "^.+\\.(t|j)sx?$": "ts-jest"
+  },
+  "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+  "moduleFileExtensions": ["tsx", "ts", "js", "jsx", "json", "node"],
+  "moduleNameMapper": {
+    "^image![a-zA-Z0-9$_-]+$": "GlobalImageStub",
+    "^[./a-zA-Z0-9$_-]+\\.png$": "<rootDir>/RelativeImageStub.js",
+    "module_name_(.*)": "<rootDir>/substituted_module_$1.js"
+  }
+}
