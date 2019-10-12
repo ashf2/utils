@@ -64,20 +64,137 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<a href="#typescript-发布包流程" id="typescript-发布包流程" style="color: inherit; text-decoration: none;">
-					<h1>typescript 发布包流程</h1>
+				<a href="#typescript-创建包编写包发布包流程" id="typescript-创建包编写包发布包流程" style="color: inherit; text-decoration: none;">
+					<h5>typescript 创建包编写包发布包流程</h5>
 				</a>
-				<p>初始化仓库 / 初始化文件夹 / 初始化 npm / 初始化 tsc
-					修改 tsconfig.json 配置
-					添加 tslint 校验代码规则以及 editorconfig,prettier 统一代码风格
-					设置 git 提交的校验钩子
-					配置webpack
-					编写插件代码
-					添加单元测试
-					写一个单元测试示例
-					完善文档信息
-					完善 package.json 的描述信息
-				发布到 npm</p>
+				<ul>
+					<li>初始化</li>
+					<li>修改 tsconfig.json 配置</li>
+					<li>husky构建代码检查</li>
+					<li>配置typedoc<ul>
+							<li>安装typedoc</li>
+							<li>配置glupfile.js</li>
+							<li>配置nginx</li>
+							<li>添加自动刷新文档功能</li>
+						</ul>
+					</li>
+					<li>编写插件代码<ul>
+							<li>方法库</li>
+							<li>组件</li>
+						</ul>
+					</li>
+					<li>添加单元测试<ul>
+							<li>方法测试</li>
+							<li>组件测试</li>
+						</ul>
+					</li>
+					<li>发布</li>
+				</ul>
+				<a href="#初始化" id="初始化" style="color: inherit; text-decoration: none;">
+					<h5>初始化</h5>
+				</a>
+				<pre><code><span class="hljs-attr">创建远程仓库</span>
+<span class="hljs-attr">git</span> <span class="hljs-string">clone https://github.com/xxx/xxx.git</span>
+<span class="hljs-attr">npm</span> <span class="hljs-string">init -y</span>
+<span class="hljs-attr">npm</span> <span class="hljs-string">i typescript -D</span>
+<span class="hljs-attr">tsc</span> <span class="hljs-string">--init</span></code></pre>
+				<a href="#修改-tsconfigjson-配置" id="修改-tsconfigjson-配置" style="color: inherit; text-decoration: none;">
+					<h5>修改 tsconfig.json 配置</h5>
+				</a>
+				<hr>
+				<pre><code>{
+  <span class="hljs-string">"compilerOptions"</span>: {
+    <span class="hljs-string">"declaration"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-string">"target"</span>: <span class="hljs-string">"es6"</span>,
+    <span class="hljs-string">"module"</span>: <span class="hljs-string">"es6"</span>,
+    <span class="hljs-string">"moduleResolution"</span>: <span class="hljs-string">"node"</span>,
+    <span class="hljs-string">"esModuleInterop"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-string">"allowSyntheticDefaultImports"</span>: <span class="hljs-literal">true</span>
+  },
+  <span class="hljs-string">"typedocOptions"</span>: {
+    <span class="hljs-string">"mode"</span>: <span class="hljs-string">"modules"</span>,
+    <span class="hljs-string">"out"</span>: <span class="hljs-string">"docs"</span>,
+    <span class="hljs-string">"target"</span>: <span class="hljs-string">"es6"</span>,
+    <span class="hljs-string">"theme"</span>: <span class="hljs-string">"default"</span>,
+    <span class="hljs-string">"isolatedModules"</span>: <span class="hljs-literal">false</span>, //将每个文件作为单独的模块。
+  },
+  <span class="hljs-string">"include"</span>: [<span class="hljs-string">".tmp/**/*"</span>],
+  <span class="hljs-string">"exclude"</span>: [<span class="hljs-string">"node_modules"</span>]
+}
+</code></pre>
+				<a href="#husky构建代码检查" id="husky构建代码检查" style="color: inherit; text-decoration: none;">
+					<h5>husky构建代码检查</h5>
+				</a>
+				<pre><code><span class="hljs-comment">//安装 美化代码库prettier，代码检查库tslint。注：prettier某些配置会和tslint冲突，有些配置需要统一</span>
+npm <span class="hljs-selector-tag">i</span> prettier tslint tslint-config-prettier -D</code></pre>
+				<a href="#配置doc" id="配置doc" style="color: inherit; text-decoration: none;">
+					<h5>配置doc</h5>
+				</a>
+				<pre><code><span class="hljs-comment">// 1.安装相关插件</span>
+npm i -D gulp typedoc gulp-typedoc
+
+<span class="hljs-comment">// 2.配置gulpfile.js</span>
+<span class="hljs-keyword">var</span> gulp = <span class="hljs-built_in">require</span>(<span class="hljs-string">'gulp'</span>);
+<span class="hljs-keyword">var</span> typedoc = <span class="hljs-built_in">require</span>(<span class="hljs-string">"gulp-typedoc"</span>);
+<span class="hljs-keyword">const</span> browserSync = <span class="hljs-built_in">require</span>(<span class="hljs-string">'browser-sync'</span>).create();
+
+
+<span class="hljs-keyword">const</span> runTypeDoc = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> gulp
+  .src([<span class="hljs-string">"src/**/*.ts"</span>])
+  .pipe(typedoc({
+    <span class="hljs-attr">exclude</span>:[<span class="hljs-string">"node_modules"</span>,
+            <span class="hljs-string">"**/*+(index|.worker|.e2e).ts"</span>],
+    <span class="hljs-comment">// TypeScript options (see typescript docs)</span>
+    <span class="hljs-built_in">module</span>: <span class="hljs-string">"commonjs"</span>,
+    <span class="hljs-attr">target</span>: <span class="hljs-string">"es5"</span>,
+    <span class="hljs-attr">includeDeclarations</span>: <span class="hljs-literal">false</span>,
+
+    <span class="hljs-comment">// Output options (see typedoc docs)</span>
+    out: <span class="hljs-string">"./docs"</span>,
+
+    <span class="hljs-comment">// TypeDoc options (see typedoc docs)</span>
+    name: <span class="hljs-string">"my-project"</span>,
+    <span class="hljs-attr">ignoreCompilerErrors</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">version</span>: <span class="hljs-literal">true</span>,
+  }))
+
+<span class="hljs-keyword">const</span> reload = <span class="hljs-function">(<span class="hljs-params">done</span>) =&gt;</span> {
+  browserSync.reload();
+  done()
+}
+<span class="hljs-keyword">const</span> runBrowserSync = <span class="hljs-function">(<span class="hljs-params">done</span>) =&gt;</span> {
+  browserSync.init({
+    <span class="hljs-attr">server</span>: {
+        <span class="hljs-attr">baseDir</span>: <span class="hljs-string">'./docs'</span>,
+        <span class="hljs-attr">reloadDelay</span>:<span class="hljs-number">1000</span>
+    },
+  })
+  done()
+}
+
+<span class="hljs-keyword">const</span> watch = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> gulp.watch(
+  [<span class="hljs-string">'README.md'</span>, <span class="hljs-string">'src/**/*.ts'</span>],
+  gulp.series(runTypeDoc, reload)
+)
+
+gulp.task(<span class="hljs-string">'default'</span>, gulp.series(runTypeDoc, runBrowserSync, watch))
+
+<span class="hljs-comment">// 配置nginx</span>
+{
+    listen <span class="hljs-number">10015</span>;
+    server_name  <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>;
+    location / {
+      root /Users/jf/Documents/packages/utils/doc;
+      index index.html index.htm;
+    }
+}
+
+<span class="hljs-comment">//文档修改后监听自动刷新</span>
+- 使用gulp
+</code></pre>
+				<a href="#编写插件代码" id="编写插件代码" style="color: inherit; text-decoration: none;">
+					<h5>编写插件代码</h5>
+				</a>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -96,7 +213,7 @@
 						<a href="modules/_component_index_.html">"component/index"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_doc_math_color_.html">"doc/math/color"</a>
+						<a href="modules/_function_math_color_.html">"function/math/color"</a>
 					</li>
 				</ul>
 			</nav>

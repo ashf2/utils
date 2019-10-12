@@ -1,10 +1,10 @@
 export class color
 {
-    /** r 通道 */
+    /** r 通道adasdad */
     r:number;
     /** * g通道 */
     g:number;
-    /** * b通道 */
+    /** * b通道sss */
     b:number;
     /** * a通道 */
     a:number;

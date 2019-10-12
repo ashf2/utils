@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "typedoc src && node ./server.js",
+    "start": "gulp server",
+    "build:doc": "typedoc src ",
     "build:cjs": "tsc -m commonjs --outDir ./lib",
     "build:esm": "tsc -m es6 --outDir ./es",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@types/enzyme": "^3.10.3",
     "@types/jest": "^24.0.18",
+    "browser-sync": "^2.26.7",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
     "gulp": "^4.0.2",
@@ -32,14 +34,17 @@
     "husky": "^3.0.8",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
-    "source-map-loader": "^0.2.4",
     "ts-jest": "^24.1.0",
     "ts-loader": "^6.2.0",
     "tslint": "^5.20.0",
     "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.15.0",
     "typescript": "^3.6.4",
-    "webpack-cli": "^3.3.9"
+    "@types/react": "^16.9.5",
+    "gulp-nodemon": "^2.4.2",
+    "md5": "^2.2.1",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2"
   },
   "husky": {
     "hook": {
@@ -47,14 +52,5 @@
         "lint"
       ]
     }
-  },
-  "dependencies": {
-    "@types/react": "^16.9.5",
-    "html-webpack-plugin": "^3.2.0",
-    "md5": "^2.2.1",
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
-    "webpack": "^4.41.0",
-    "webpack-dev-server": "^3.8.2"
   }
 }
