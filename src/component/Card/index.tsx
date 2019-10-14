@@ -6,13 +6,11 @@ interface IObjects {
 
 // tslint:disable-next-line:no-empty-interface
 interface IProps {
-    title?: string
+    title?: string,
+    content?: string
 }
 
-interface IStates {
-    name?: string
-}
-const PluginDemo: React.FC<IProps> = ({ title }) => {
+const Card: React.FC<IProps> = ({ title, content }) => {
   return (<div
     style={{
         width: '100vw',
@@ -22,7 +20,8 @@ const PluginDemo: React.FC<IProps> = ({ title }) => {
         fontSize: '30px',
     }}
   >
-  {title}
+  <h4>{title}</h4>
+  <p>{content}</p>
   </div>)
 }
-export default PluginDemo
+export default Card;

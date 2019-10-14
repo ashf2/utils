@@ -1,5 +1,5 @@
 import React from 'react';
-import { PluginDemo } from '../../src/component/PluginDemo/index'
+import Card from '../../src/component/Card/index'
 
 // tslint:disable-next-line:no-empty-interface
 interface IProps {}
@@ -10,7 +10,7 @@ class App extends React.Component<IProps, IStates> {
     render() {
         return (
             <React.Fragment>
-                <PluginDemo title={"hello"}/>
+                <Card title={"card title"} content="card content"/>
             </React.Fragment>
         )
     }

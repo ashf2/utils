@@ -19,8 +19,10 @@
     "jsx": "react",
     "baseUrl": "./",
     "paths": { "*": ["types/*"] }
+    
     // "suppressImplicitAnyIndexErrors": true, //阻止对缺少索引签名的索引对象报错
   },
+  "transformIgnorePatterns": ["node-modules/"] ,
   "exclude": ["node_modules"],
   "include": ["src/**/*"]
 }

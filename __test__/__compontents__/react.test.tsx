@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow, configure } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
-import { PluginDemo } from '../src/component/PluginDemo/index'
+import Card from '../../src/component/Card/index'
 
 configure({ adapter: new Adapter() })
 
@@ -12,7 +12,7 @@ const setup = () => {
         title: '测试组件的props传值',
     }
     // 通过 enzyme 提供的 shallow(浅渲染) 创建组件
-    const wrapper = shallow(<PluginDemo {...props} />)
+    const wrapper = shallow(<Card {...props}></Card>)
     return {
         props,
         wrapper,

@@ -1,6 +1,7 @@
 /node_modules
 /history
 /dist
+/docs
 *.log
 package-lock.json
 yarn-lock.json
